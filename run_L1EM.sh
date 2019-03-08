@@ -98,7 +98,7 @@ mkdir ../G_of_R
 cd ../G_of_R
 medianinsert=$($python ${L1EM_utilities_dir}median_template.py $bamfile $template_fraction)
 for bam in ../split_fqs/*.bam
-	do $python ${L1EM_code_dir}G_of_R.py -b ../split_fqs/$base.aln.bam -i $medianinsert -p $(echo $bam| cut -d '/' -f 3) -e $error_prob -m $max_start2start_len -r $reads_per_pickle -n $NMdiff &
+	do $python ${L1EM_code_dir}G_of_R.py -b ../split_fqs/$bam -i $medianinsert -p $(echo $bam| cut -d '/' -f 3) -e $error_prob -m $max_start2start_len -r $reads_per_pickle -n $NMdiff &
 done
 wait
 
