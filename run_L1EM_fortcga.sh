@@ -95,7 +95,7 @@ python ${L1EM_code_dir}L1EM.py -g G_of_R_list.txt -l TE_list.txt -t $threads -s 
 #Write results as text file
 echo 'STEP 6: Writing results'
 
-$python ${L1EM_utilities_dir}report_l1_exp_counts.py > ../full_counts.txt
+$python ${L1EM_utilities_dir}report_l1_exp_counts_unstranded.py > ../full_counts.txt
 $python ${L1EM_utilities_dir}report_l1hs_transcription.py > ../l1hs_transcript_counts.txt
 
 #Clean up
