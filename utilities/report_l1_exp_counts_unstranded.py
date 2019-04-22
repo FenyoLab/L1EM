@@ -1,4 +1,5 @@
 import cPickle as pickle
+import sys
 
 """
 Extract the estimate of proper transcription of L1HS elements.
@@ -26,7 +27,7 @@ for line in open('G_of_R_list.txt'):
 	if G_of_R != None:
 		total += pickle.load(open(line.strip())).shape[0]
 
-X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.pkl'))))
+X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
 
 written_seqs = set([])
 
