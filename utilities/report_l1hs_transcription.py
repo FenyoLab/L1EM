@@ -3,8 +3,6 @@ import cPickle as pickle
 """
 Extract the estimate of proper transcription of L1HS elements.
 
-Part of the L1-EM package.
-
 Copyright (C) 2019 Wilson McKerrow
 
     This program is free software: you can redistribute it and/or modify
@@ -24,7 +22,9 @@ Copyright (C) 2019 Wilson McKerrow
 
 total = 0
 for line in open('G_of_R_list.txt'):
-	total += pickle.load(open(line.strip())).shape[0]
+	G_of_R = pickle.load(open(line.strip()))
+	if G_of_R != None:
+		total += G_of_R.shape[0]
 
 X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.pkl'))))
 

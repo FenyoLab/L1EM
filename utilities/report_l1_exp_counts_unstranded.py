@@ -30,7 +30,7 @@ X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.
 
 written_seqs = set([])
 
-print "family.category.locus.strand\tonly\t3prunon\tpassive_sense\tpassive_antisense\tantisense"
+print "family.category.locus.strand\tonly\t3prunon\tpassive"
 
 names = X_est.keys()
 
@@ -49,16 +49,8 @@ for name in names:
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		print_string += '\t'+str(total*X_est[runon_name])
-		senserunthrough_name = seq_name+'_senserunthrough'
-		if senserunthrough_name not in X_est:
-			X_est[senserunthrough_name]=0.0
-		print_string += '\t'+str(total*X_est[senserunthrough_name])
-		antisenserunthrough_name = seq_name+'_antisenserunthrough'
-		if antisenserunthrough_name not in X_est:
-			X_est[antisenserunthrough_name]=0.0
-		print_string += '\t'+str(total*X_est[antisenserunthrough_name])
-		antisense_name = seq_name+'_antisense'
-		if antisense_name not in X_est:
-			X_est[antisense_name]=0.0
-		print_string += '\t'+str(total*X_est[antisense_name])
+		runthrough_name = seq_name+'_runthrough'
+		if runthrough_name not in X_est:
+			X_est[runthrough_name]=0.0
+		print_string += '\t'+str(total*X_est[runthrough_name])
 		print print_string
