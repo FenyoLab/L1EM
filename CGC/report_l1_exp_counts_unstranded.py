@@ -2,7 +2,8 @@ import cPickle as pickle
 import sys
 
 """
-Extract the estimate of proper transcription of L1HS elements.
+Extract the LINE-1 transcript estimates from L1EM. This version is intended for use on CGC
+to analyze TCGA data.
 
 Copyright (C) 2019 Wilson McKerrow
 
@@ -29,6 +30,8 @@ for line in open('G_of_R_list.txt'):
 
 X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
 
+proper_pairs_in_original_bam = float(sys.argv[3])
+
 written_seqs = set([])
 
 print "family.category.locus.strand\tonly\t3prunon\tpassive"
@@ -45,13 +48,13 @@ for name in names:
 		only_name = seq_name+'_only'
 		if only_name not in X_est:
 			X_est[only_name]=0.0
-		print_string += '\t'+str(total*X_est[only_name])
+		print_string += '\t'+str(total*X_est[only_name]/proper_pairs_in_original_bam*10**6)
 		runon_name = seq_name+'_3prunon'		
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
-		print_string += '\t'+str(total*X_est[runon_name])
+		print_string += '\t'+str(total*X_est[runon_name]/proper_pairs_in_original_bam*10**6)
 		runthrough_name = seq_name+'_runthrough'
 		if runthrough_name not in X_est:
 			X_est[runthrough_name]=0.0
-		print_string += '\t'+str(total*X_est[runthrough_name])
+		print_string += '\t'+str(total*X_est[runthrough_name]/proper_pairs_in_original_bam*10**6)
 		print print_string
