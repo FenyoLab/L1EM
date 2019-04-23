@@ -290,7 +290,7 @@ def main():
 	# Write matrix to disk.
 	cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
 	G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
-	print G_of_R_row
+	print G_of_R_row+reads_per_pickle*pickle_num
 	
 if __name__ == '__main__':
 	main()
