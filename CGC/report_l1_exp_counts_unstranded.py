@@ -22,9 +22,11 @@ Copyright (C) 2019 Wilson McKerrow
 
 """
 
-proper_pairs_in_original_bam = float(sys.argv[1])
+X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
 
-total = float(sys.argv[2])
+proper_pairs_in_original_bam = float(sys.argv[3])
+
+total = float(sys.argv[4])
 
 written_seqs = set([])
 
