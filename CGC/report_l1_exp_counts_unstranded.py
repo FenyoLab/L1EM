@@ -22,15 +22,9 @@ Copyright (C) 2019 Wilson McKerrow
 
 """
 
-total = 0
-for line in open('G_of_R_list.txt'):
-	G_of_R = pickle.load(open(line.strip()))
-	if G_of_R != None:
-		total += pickle.load(open(line.strip())).shape[0]
+proper_pairs_in_original_bam = float(sys.argv[1])
 
-X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
-
-proper_pairs_in_original_bam = float(sys.argv[3])
+total = float(sys.argv[2])
 
 written_seqs = set([])
 
