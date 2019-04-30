@@ -28,7 +28,11 @@ def main():
 	bamfile = sys.argv[2]
 	outbamfile = sys.argv[3]
 	if len(sys.argv) > 4:
-		maxNM = int(sys.argv[4])
+		flanking = int(sys.argv[4])
+	else:
+		flanking = 400
+	if len(sys.argv) > 5:
+		maxNM = int(sys.argv[5])
 	else:
 		maxNM = 4
 	
@@ -38,8 +42,8 @@ def main():
 	read_ids = set()
 	for line in open(bedfile):
 		chrom,start,stop = line.strip().split('\t')[:3]
-		start = int(start)
-		stop = int(stop)
+		start = int(start)+flanking
+		stop = int(stop)-flanking
 		if chrom in inbam.references:
 			for read in inbam.fetch(chrom,start,stop):
 				if not read.is_unmapped:
