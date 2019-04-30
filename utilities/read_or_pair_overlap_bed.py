@@ -43,7 +43,7 @@ def main():
 		if chrom in inbam.references:
 			for read in inbam.fetch(chrom,start,stop):
 				if not read.is_unmapped:
-					if not read.is_secondary and not read.is_supplementary and 'S' not in read.cigarstring and 'N' not in read.cigarstring and read.get_tag('NM')<=maxNM:
+					if not read.is_secondary and not read.is_supplementary and 'S' not in read.cigarstring and 'N' not in read.cigarstring and (not read.has_tag('NM') or read.get_tag('NM')<=maxNM):
 						read_ids.add(read.query_name)
 # 		if chrom[3:] in inbam.references:
 # 			for read in inbam.fetch(chrom[3:],start,stop):
