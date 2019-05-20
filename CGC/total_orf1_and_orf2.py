@@ -6,7 +6,7 @@ bam_info_list = sys.argv[2]
 orf1_list = sys.argv[3]
 orf2_list = sys.argv[4]
 min_FPM = float(sys.argv[5])
-allowed_runon_fraction = float(sys.argv[6])
+allowed_runthrough_fraction = float(sys.argv[6])
 
 l1pa_pairs = dict()
 mapped_pairs = dict()
@@ -48,7 +48,7 @@ for line in open(exp_prob_pkls_list):
 			runthrough_FPM = exp_prob[runthrough_name]*l1pa_pairs[sample_name]/mapped_pairs[sample_name]*10**6
 		else:
 			runthrough_FPM = 0.0
-		FPM *= FPM >= min_FPM and runthrough_FPM/(runthrough_FPM+FPM) <= allowed_runon_fraction
+		FPM *= FPM >= min_FPM and runthrough_FPM/(runthrough_FPM+FPM) <= allowed_runthrough_fraction
 		if seq_name.split('(')[0][:-2] in orf1_intact:
 			orf1 += FPM
 		if seq_name.split('(')[0][:-2] in orf2_intact:
