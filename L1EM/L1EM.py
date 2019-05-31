@@ -154,15 +154,15 @@ def main():
 		print step,numpy.max(numpy.abs(X.toarray()-last_X.toarray())),loglik,datetime.datetime.now()-starttime
 		
 		if (step+1) % report_every == 0:
-			cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'))
-			cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'))
+			cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+			cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
 		
 		if numpy.max(numpy.abs(X.toarray()-last_X.toarray())) < stop_thresh:
 			break
 	
 	# Output the final results
-	cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'))
-	cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'))
-		
+	cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+	cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+
 if __name__ == '__main__':
 	main()
