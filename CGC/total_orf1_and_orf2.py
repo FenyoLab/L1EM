@@ -24,7 +24,7 @@ for line in open(bam_info_list):
 	mapped_pairs[name] = int(baminfo[1])
 	l1pa_pairs[name] = int(baminfo[2])
 
-print 'name\torf1_FPM\tORF2_FPM\tboth_FPM'
+print 'name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM'
 
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
@@ -33,6 +33,8 @@ for line in open(exp_prob_pkls_list):
 	orf1 = 0.0
 	orf2 = 0.0
 	both = 0.0
+	L1HS_exp = 0.0
+	L1HS_all = 0.0
 	for transcript in exp_prob:
 		if 'only' not in transcript:
 			continue
@@ -55,4 +57,7 @@ for line in open(exp_prob_pkls_list):
 			orf2 += FPM
 		if seq_name.split('(')[0][:-2] in orf1_intact and seq_name.split('(')[0][:-2] in orf2_intact:
 			both += FPM
-	print ( sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) )
+		if 'L1HS' in seq_name:
+			L1HS_exp += FPM
+			L1HS_all += FPM+runthrough_FPM
+	print ( sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all) )
