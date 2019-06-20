@@ -36,6 +36,8 @@ for line in open(exp_prob_pkls_list):
 	L1HS_exp = 0.0
 	L1HS_all = 0.0
 	for transcript in exp_prob:
+		if 'L1HS' in transcript:
+			L1HS_all += exp_prob[transcript]*l1pa_pairs[sample_name]/mapped_pairs[sample_name]*10**6
 		if 'only' not in transcript:
 			continue
 		seq_name = '_'.join(transcript.split('_')[:-1])
@@ -59,5 +61,4 @@ for line in open(exp_prob_pkls_list):
 			both += FPM
 		if 'L1HS' in seq_name:
 			L1HS_exp += FPM
-			L1HS_all += FPM+runthrough_FPM
 	print ( sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all) )
