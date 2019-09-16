@@ -73,16 +73,18 @@ these comments.
 
 ### Output
 At completion, two tab delimited table will be written.
-1. full\_counts.txt
-2. l1hs\_transcript_counts.txt
+At completion, three tab delimited tables will be written.
+1. full\_counts.txt: raw count estimates for each L1HS/L1PA\* element with any aligned read pairs
+2. l1hs\_transcript\_counts.txt: expression estimates for L1HS elements, reported as raw counts
+3. filter\_L1HS\_FPM.txt: L1HS whose expression is supported by at least 100 read pairs, reported as FPM (read pairs per million properly aligned)
 
-The rows of both files are L1 loci.
+The rows of all files are L1 loci.
 
 For full\_counts.txt each of the five transcript types:
 only, runon, passive (sense), passive (antisense), antisense
 are reported.
 
-For l1hs\_transcript_counts.txt only proper transcription from L1HS elements start at the
+For l1hs\_transcript\_counts.txt and filter\_L1HS\_FPM.txt only proper transcription from L1HS elements start at the
 5' UTR is reported.
 
 The results are also written as pickle files to facilitate further analysis in python. To
@@ -93,7 +95,7 @@ X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.
 ```
 
 ## Additional details
-* URL for our methods paper will appear here when it is published
+* bioRxiv preprint: https://www.biorxiv.org/content/10.1101/714014v1
 * More details can be found in manual.md
 
 

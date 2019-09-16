@@ -58,9 +58,10 @@ The following options are additional parameters that can be accessed at this ste
 2. -m/--max\_nEMsteps. By default EM stops if converge has not been achieved after 10000 steps. Change that value here.
 
 ### STEP 6: Writing results
-At completion, two tab delimited table will be written.
-1. full\_counts.txt
-2. l1hs\_transcript_counts.txt
+At completion, three tab delimited tables will be written.
+1. full\_counts.txt: raw count estimates for each L1HS/L1PA\* element with any aligned read pairs
+2. l1hs\_transcript\_counts.txt: expression estimates for L1HS elements, reported as raw counts
+3. filter\_L1HS\_FPM.txt: L1HS whose expression is supported by at least 100 read pairs, reported as FPM (read pairs per million properly aligned)
 
 ### STEP 7: Clean up
 All the intermediate files are delete at this step. Comment out these lines if you want to keep them.
