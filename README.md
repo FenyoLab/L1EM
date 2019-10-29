@@ -98,7 +98,7 @@ X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.
 ```
 
 ## Additional details
-* bioRxiv preprint: https://www.biorxiv.org/content/10.1101/714014v1
+* Our Bioinformatics paper introducing L1EM: https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btz724/5581349
 * More details can be found in manual.md
 
 
