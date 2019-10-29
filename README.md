@@ -34,6 +34,9 @@ Alternatively you can install the following dependencies yourself:
 * pysam (version 0.15.0 tested)
 * bedtools (version 2.27.1 tested)
 
+No compiling of L1EM is necessary. Python scripts will be called from inside the L1EM
+directory.
+
 If necessary, you can specify the path for bwa and samtools in the run\_L1EM.sh script.
 You must use samtools >=1.0. Early version of pysam will not work. I highly recommend
 that you use bwa 0.7.17. Earlier versions may differ in how they write the XA tag. This
@@ -54,11 +57,12 @@ Then you can build the L1EM reference using the provided shell script:
 ```
 bash generate_L1EM_fasta_and_index.sh /fullpathto/hg38.fa
 ```
+This should be done inside the L1EM directory
 
 ### Executing the L1-EM pipeline
 You will need a bam file with strand specific paired end read alignments to hg38. You can
 use any aligner, but make sure that all reads from the original fastq files are present
-trimming is okay, but filtering reads will potentially break the pipeline.
+trimming should be okay, but is tested. Filtering reads will potentially break the pipeline.
 
 First move to an empty directory and then execute the shell script:
 ```
@@ -72,7 +76,6 @@ intermediate files. If you wish to automatically delete intermediate files, you 
 these comments.
 
 ### Output
-At completion, two tab delimited table will be written.
 At completion, three tab delimited tables will be written.
 1. full\_counts.txt: raw count estimates for each L1HS/L1PA\* element with any aligned read pairs
 2. l1hs\_transcript\_counts.txt: expression estimates for L1HS elements, reported as raw counts
