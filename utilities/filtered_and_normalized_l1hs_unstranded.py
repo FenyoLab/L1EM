@@ -49,13 +49,9 @@ for name in names:
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		runon_pairs = total*X_est[runon_name]
-		runthroughS_name = seq_name+'_senserunthrough'
-		if runthroughS_name not in X_est:
-			X_est[runthroughS_name]=0.0
-		runthrough_pairs = total*X_est[runthroughS_name]
-		runthroughA_name = seq_name+'_antisenserunthrough'
-		if runthroughA_name not in X_est:
-			X_est[runthroughA_name]=0.0
-		runthrough_pairs += total*X_est[runthroughA_name]
+		runthrough_name = seq_name+'_runthrough'
+		if runthrough_name not in X_est:
+			X_est[runthrough_name]=0.0
+		runthrough_pairs = total*X_est[runthrough_name]
 		if (only_pairs+runon_pairs > 3*runthrough_pairs) & (only_pairs+runon_pairs>100):
 			print seq_name.split('(')[0]+'\t'+str(only_pairs/proper_pairs_in_original_bam*10**6)+'\t'+str(runon_pairs/proper_pairs_in_original_bam*10**6)

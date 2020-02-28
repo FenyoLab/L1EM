@@ -21,7 +21,7 @@
 # Parameters
 threads=16 #How many threads to use for samtools, bwa and L1EM
 realignNM=3 #Number of mismatches allowed in bwa realignment
-L1EM_NM=4 # Number of mismatches allowed when enumerated candidate alignments
+L1EM_NM=3 # Number of mismatches allowed when enumerated candidate alignments
 NMdiff=2 #Skip candidate alignments with greater than this many more mismatches than the best alignment
 bwa_i=20 #bwa i parameter prevents indels near the edges of a read
 error_prob=0.01 #Probability of a read error at a given position
