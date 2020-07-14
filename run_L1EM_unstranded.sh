@@ -21,7 +21,7 @@
 # Parameters
 threads=16 #How many threads to use for samtools, bwa and L1EM
 realignNM=3 #Number of mismatches allowed in bwa realignment
-L1EM_NM=4 # Number of mismatches allowed when enumerated candidate alignments
+L1EM_NM=3 # Number of mismatches allowed when enumerated candidate alignments
 NMdiff=2 #Skip candidate alignments with greater than this many more mismatches than the best alignment
 bwa_i=20 #bwa i parameter prevents indels near the edges of a read
 error_prob=0.01 #Probability of a read error at a given position
@@ -44,6 +44,7 @@ L1EM_bed=$L1EM_directory'/annotation/L1EM.400.bed'
 L1EM_fa=$L1EM_directory'/annotation/L1EM.400.fa'
 L1EM_code_dir=$L1EM_directory'/L1EM/'
 L1EM_utilities_dir=$L1EM_directory'/utilities/'
+L1EM_CGC_dir=$L1EM_directory'/CGC/'
 
 # Try to realign unaligned reads using bwa aln.
 echo 'STEP 1: realign'
@@ -96,7 +97,8 @@ wait
 echo 'STEP 4: G(R) matrix construction'
 mkdir ../G_of_R
 cd ../G_of_R
-medianinsert=$($python ${L1EM_utilities_dir}median_template.py $bamfile $template_fraction)
+$python ${L1EM_CGC_dir}median_template_and_pairs.py $bamfile 0.001 > ../baminfo.txt
+medianinsert=$(head -1 ../baminfo.txt)
 for bam in ../split_fqs/*.bam
 	do $python ${L1EM_code_dir}G_of_R_unstranded.py -b ../split_fqs/$bam -i $medianinsert -p $(echo $bam| cut -d '/' -f 3) -e $error_prob -m $max_start2start_len -r $reads_per_pickle -n $NMdiff &
 done
@@ -113,8 +115,10 @@ python ${L1EM_code_dir}L1EM.py -g G_of_R_list.txt -l TE_list.txt -t $threads -s 
 #Write results as text file
 echo 'STEP 6: Writing results'
 
+$python ${L1EM_utilities_dir}L1EM_readpairs.py >> ../baminfo.txt
 $python ${L1EM_utilities_dir}report_l1_exp_counts_unstranded.py > ../full_counts.txt
 $python ${L1EM_utilities_dir}report_l1hs_transcription_unstranded.py > ../l1hs_transcript_counts.txt
+$python ${L1EM_utilities_dir}filtered_and_normalized_l1hs_unstranded.py names_final.pkl X_final.pkl $(head -2 ../baminfo.txt | tail -1) $(head -3 ../baminfo.txt | tail -1)> ../filter_L1HS_FPM.txt
 
 #Clean up
 echo 'STEP 7: Clean up'
