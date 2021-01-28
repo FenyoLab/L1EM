@@ -101,5 +101,24 @@ X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.
 * Our Bioinformatics paper introducing L1EM: https://academic.oup.com/bioinformatics/advance-article/doi/10.1093/bioinformatics/btz724/5581349
 * More details can be found in manual.md
 
+## Mouse Version
+Scripts and annotation to measure the expression of LINE-1 loci in mm39 has been added. The mouse version uses all the same methodology as the human version, but has not been as rigorously tested.
+1. Download and index the mm39 reference genome (UCSC genome browser version)
+```
+wget http://hgdownload.cse.ucsc.edu/goldenPath/mm39/bigZips/mm39.fa.gz
+zcat mm39.fa.gz > mm39.fa
+bwa index mm39.fa
+```
+2. Build the mm39 L1EM reference.
+```
+bash generate_mm39_L1EM_fasta_and_index.sh /fullpathto/mm39.fa
+```
+3. Run L1EM.
+```
+bash /fullpathto/run_L1EM_mm39.sh /fullpathto/alignments.bam /fullpathto/L1EM /fullpathto/mm39.fa
+```
+All L1Md loci are quantified in full\_counts.txt. Normalized expression of 5' UTR intact young (L1Md\_Tf I/II/II, L1Md\_Gf I/II, L1Md\_A I/II/III) LINE-1 loci supported by at least 100 reads can be found in filter\_active\_L1Md\_FPM.txt.
+
+
 
 
