@@ -279,7 +279,7 @@ def main():
 				alignments2 = parseXA(alignments2,dict(alignment.tags)['XA'],error_prob,NMtag+NMdiff,alignment.is_reverse)
 	
 	# Make row for last read
-	if not (new_read_id1 or new_read_id2):
+	if read_id!=None and not (new_read_id1 or new_read_id2):
 		this_G_of_R = get_concardant_alignments(alignments1,alignments2,max_start2start_len,rnames_index,rlens,insert_mean,nreps,read_length,flanking,as_start,wiggle,min_len,min_exon_len)
 		if this_G_of_R.nnz > 0:
 			if G_of_R_row > 0:
@@ -288,9 +288,10 @@ def main():
 				G_of_R = this_G_of_R
 	
 	# Write matrix to disk.
-	cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
-	G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
-	print G_of_R_row+reads_per_pickle*pickle_num
+	if G_of_R_row+reads_per_pickle*pickle_num >0:
+		cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
+		G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
+		print G_of_R_row+reads_per_pickle*pickle_num
 	
 if __name__ == '__main__':
 	main()

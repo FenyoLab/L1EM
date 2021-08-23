@@ -66,7 +66,7 @@ trimming should be okay, but is tested. Filtering reads will potentially break t
 
 First move to an empty directory and then execute the shell script:
 ```
-bash /fullpathto/run_L1EM.sh /fullpathto/alignments.bam /fullpathto/L1EM /fullpathto/hg38.fa
+bash -e /fullpathto/run_L1EM.sh /fullpathto/alignments.bam /fullpathto/L1EM /fullpathto/hg38.fa
 ```
 L1EM will write files with specific names, so do NOT run two instances of L1EM in the same
 directory.
