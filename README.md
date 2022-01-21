@@ -6,7 +6,7 @@ You will need
 
 Download from github
 ```
-git clone https://github.com/wmckerrow/L1EM
+git clone https://github.com/FenyoLab/L1EM
 ```
 Create conda environment
 ```
