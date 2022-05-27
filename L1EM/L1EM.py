@@ -1,4 +1,4 @@
-import cPickle
+import cPickle as pickle
 import numpy
 import sys
 import datetime
@@ -31,7 +31,7 @@ Copyright (C) 2019 Wilson McKerrow
 # Main calculation for the E step
 def calculate_expcounts(G_of_R_pkl,X):
 	G_of_R_file = open(G_of_R_pkl)
-	G_of_R = cPickle.load(G_of_R_file)
+	G_of_R = pickle.load(G_of_R_file)
 	G_of_R_file.close()
 	if G_of_R == None:
 		return 0.0,0.0
@@ -154,15 +154,15 @@ def main():
 		print(str(step)+" "+str(numpy.max(numpy.abs(X.toarray()-last_X.toarray())))+" "+str(loglik)+" "+str(datetime.datetime.now()-starttime))
 
 		if (step+1) % report_every == 0:
-			cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-			cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+			pickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'),protocol=pickle.HIGHEST_PROTOCOL)
+			pickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'),protocol=pickle.HIGHEST_PROTOCOL)
 
 		if numpy.max(numpy.abs(X.toarray()-last_X.toarray())) < stop_thresh:
 			break
 
 	# Output the final results
-	cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-	cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+	pickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'),protocol=pickle.HIGHEST_PROTOCOL)
+	pickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'),protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
 	main()

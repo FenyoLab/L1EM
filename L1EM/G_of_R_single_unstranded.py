@@ -1,7 +1,7 @@
 import pysam
 import sys
 import numpy
-import cPickle
+import cPickle as pickle
 from scipy import sparse
 import datetime
 import argparse
@@ -216,7 +216,7 @@ def main():
 					G_of_R_row += 1
 				# If necessary, break up matrix into multiple pickle files.
 				if G_of_R_row >= reads_per_pickle:
-					cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
+					pickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=pickle.HIGHEST_PROTOCOL)
 					G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
 					pickle_num += 1
 					G_of_R_row = 0
@@ -252,7 +252,7 @@ def main():
 				G_of_R = this_G_of_R
 
 	# Write matrix to disk.
-	cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
+	pickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=pickle.HIGHEST_PROTOCOL)
 	G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
 	print(G_of_R_row+reads_per_pickle*pickle_num)
 
