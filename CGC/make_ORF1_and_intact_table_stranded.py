@@ -1,5 +1,9 @@
 import sys
-import pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 exp_prob_pkls_list = sys.argv[1]
 bam_info_list = sys.argv[2]

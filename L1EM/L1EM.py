@@ -1,4 +1,8 @@
-import pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import numpy
 import sys
 import datetime
