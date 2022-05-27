@@ -26,7 +26,7 @@ print_string = "locus"
 for name in exp_probs:
 	print_string += "\t"+name+'-active'+"\t"+name+'-passive'
 
-print (print_string)
+print(print_string)
 
 completed = set()
 
@@ -52,4 +52,4 @@ for name in seqs:
 		if runthrough_name in exp_probs[name]:
 			runthrough_FPM += exp_probs[name][runthrough_name]*l1pa_pairs[name]/mapped_pairs[name]*10**6
 		print_string += '\t'+str(FPM)+'\t'+str(runthrough_FPM)
-	print (print_string)
+	print(print_string)

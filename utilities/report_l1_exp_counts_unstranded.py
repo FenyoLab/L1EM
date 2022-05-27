@@ -32,7 +32,7 @@ X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.
 
 written_seqs = set([])
 
-print "family.category.locus.strand\tonly\t3prunon\tpassive"
+print("family.category.locus.strand\tonly\t3prunon\tpassive")
 
 names = X_est.keys()
 
@@ -47,7 +47,7 @@ for name in names:
 		if only_name not in X_est:
 			X_est[only_name]=0.0
 		print_string += '\t'+str(total*X_est[only_name])
-		runon_name = seq_name+'_3prunon'		
+		runon_name = seq_name+'_3prunon'
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		print_string += '\t'+str(total*X_est[runon_name])
@@ -55,4 +55,4 @@ for name in names:
 		if runthrough_name not in X_est:
 			X_est[runthrough_name]=0.0
 		print_string += '\t'+str(total*X_est[runthrough_name])
-		print print_string
+		print(print_string)

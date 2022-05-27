@@ -24,7 +24,7 @@ for line in open(bam_info_list):
 	mapped_pairs[name] = int(baminfo[1])
 	l1pa_pairs[name] = int(baminfo[2])
 
-print 'name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM'
+print('name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM')
 
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
@@ -61,4 +61,4 @@ for line in open(exp_prob_pkls_list):
 			both += FPM
 		if 'L1HS' in seq_name:
 			L1HS_exp += FPM
-	print ( sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all) )
+	print(sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all))

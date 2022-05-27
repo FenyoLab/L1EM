@@ -34,4 +34,4 @@ for read in pysam.AlignmentFile(bamfile):
 	if not read.is_unmapped and random.random() < fraction:
 		tlens.append(read.template_length)
 
-print numpy.median(numpy.abs(tlens))
+print(numpy.median(numpy.abs(tlens)))

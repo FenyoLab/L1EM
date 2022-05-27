@@ -111,15 +111,15 @@ def GetArgs():
 
 def main():
 	G_of_R_list, TE_list, stop_thresh, report_every, max_nEMsteps, nThreads, prefix = GetArgs()
-	
+
 	# All the transcripts names in the same order as the G_of_R matrix columns
 	TE_names = list()
 	for name in open(TE_list):
 		TE_names.append(name.strip().split('\t')[0])
-	
+
 	# Intial guess
 	X = sparse.csr_matrix(numpy.ones((1,len(TE_names)),dtype=numpy.float64)/len(TE_names))
-	
+
 	# Split up the pickle files into a set for each thread.
 	G_of_R_pkl_fulllist = list()
 	for G_of_R_pkl in open(G_of_R_list):
@@ -134,32 +134,32 @@ def main():
 	for i in range(nlistsp1,nThreads):
 		G_of_R_pkl_lists.append(G_of_R_pkl_fulllist[k:k+listsize])
 		k+=listsize
-	
+
 	masterPool = Pool(processes = nThreads)
-	
-	# Run the EM steps	
+
+	# Run the EM steps
 	for step in range(max_nEMsteps):
 		starttime = datetime.datetime.now()
 		exp_counts = numpy.zeros((1,len(TE_names)),dtype=numpy.float64)
 		loglik = 0.0
-		
+
 		outputs = masterPool.map(calculate_expcounts_chunk,zip(G_of_R_pkl_lists,[X]*nThreads))
 		for output in outputs:
 			this_exp_counts,this_loglik = output
 			exp_counts += this_exp_counts
 			loglik += this_loglik
-		
+
 		last_X = X.copy()
 		X = sparse.csr_matrix(exp_counts/numpy.sum(exp_counts))
-		print step,numpy.max(numpy.abs(X.toarray()-last_X.toarray())),loglik,datetime.datetime.now()-starttime
-		
+		print(str(step)+" "+str(numpy.max(numpy.abs(X.toarray()-last_X.toarray())))+" "+str(loglik)+" "+str(datetime.datetime.now()-starttime))
+
 		if (step+1) % report_every == 0:
 			cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
 			cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-		
+
 		if numpy.max(numpy.abs(X.toarray()-last_X.toarray())) < stop_thresh:
 			break
-	
+
 	# Output the final results
 	cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
 	cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)

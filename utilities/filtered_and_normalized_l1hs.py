@@ -30,7 +30,7 @@ total = float(sys.argv[4])
 
 written_seqs = set([])
 
-print "family.category.locus.strand\tonly\t3prunon"
+print("family.category.locus.strand\tonly\t3prunon")
 
 names = X_est.keys()
 
@@ -45,7 +45,7 @@ for name in names:
 		if only_name not in X_est:
 			X_est[only_name]=0.0
 		only_pairs = total*X_est[only_name]
-		runon_name = seq_name+'_3prunon'		
+		runon_name = seq_name+'_3prunon'
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		runon_pairs = total*X_est[runon_name]
@@ -58,4 +58,4 @@ for name in names:
 			X_est[runthroughA_name]=0.0
 		runthrough_pairs += total*X_est[runthroughA_name]
 		if (only_pairs+runon_pairs > 3*runthrough_pairs) & (only_pairs+runon_pairs>100):
-			print seq_name.split('(')[0]+'\t'+str(only_pairs/proper_pairs_in_original_bam*10**6)+'\t'+str(runon_pairs/proper_pairs_in_original_bam*10**6)
+			print(seq_name.split('(')[0]+'\t'+str(only_pairs/proper_pairs_in_original_bam*10**6)+'\t'+str(runon_pairs/proper_pairs_in_original_bam*10**6))

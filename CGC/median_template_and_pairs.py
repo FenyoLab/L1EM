@@ -37,5 +37,5 @@ for read in pysam.AlignmentFile(bamfile):
 		if random.random() < fraction:
 			tlens.append(read.template_length)
 
-print numpy.median(numpy.abs(tlens))
-print n_proper_reads/2
+print(numpy.median(numpy.abs(tlens)))
+print(n_proper_reads/2)

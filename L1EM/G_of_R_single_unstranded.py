@@ -159,9 +159,9 @@ def parseXA(alignments,XAtagdict,error_prob,maxNM,reversed):
 
 def main():
 	bamfile, error_prob, reads_per_pickle, prefix, NMdiff, flanking, wiggle, min_len, min_exon_len = GetArgs()
-	
+
 	pickle_num = 0
-	
+
 	bam = pysam.Samfile(bamfile, "rb")
 	rnames = bam.references
 	rlens = bam.lengths
@@ -169,7 +169,7 @@ def main():
 	rnames_index = dict()
 	for i in range(nreps):
 		rnames_index[rnames[i]] = i
-	
+
 	# Write transcript (column) names
 	TEnamefile = open(prefix+'_TE_list.txt','w')
 	for i in range(nreps):
@@ -179,15 +179,15 @@ def main():
 	for i in range(nreps):
 		TEnamefile.write(rnames[i]+'_3prunon'+'\t'+str(rlens[i]+flanking)+'\n')
 	TEnamefile.close()
-	
+
 	read_id = None
-	
+
 	G_of_R = None
 	G_of_R_list_file = open(prefix+'_list.txt','w')
 	G_of_R_row = 0
-	
+
 	starttime = datetime.datetime.now()
-	
+
 	# Read through the name sorted bam file
 	for alignment in bam:
 		read_length = alignment.query_length
@@ -198,11 +198,11 @@ def main():
 			continue
 		if numpy.mean(alignment.query_qualities) < 30:
 			continue
-			
+
 		if not read_id:
 			read_id = alignment.qname
 			new_read_id = True
-					
+
 		# Once we have read all entries for a given query name, create a row for that fragment
 		if read_id != alignment.qname:
 			if not new_read_id:
@@ -221,27 +221,27 @@ def main():
 					pickle_num += 1
 					G_of_R_row = 0
 					G_of_R = None
-					print 'wrote',reads_per_pickle,'reads in',datetime.datetime.now()-starttime
+					print('wrote '+str(reads_per_pickle)+' reads in '+str(datetime.datetime.now()-starttime))
 					starttime = datetime.datetime.now()
-			
+
 			read_id = alignment.qname
 			new_read_id = True
-		
+
 		# Parse primary alignment
 		# There's a bug in bwa samse (0.7.17) when writing NM tag for overlapping read pairs
 		NMtag = dict(alignment.tags)['NM']
 		P = error_prob**NMtag
-		
+
 		if new_read_id:
 			alignments = read_alignments(alignment,rnames,P)
 			new_read_id = False
 		else:
 			alignments.add(alignment,rnames,P)
-		
+
 		# Parse secondary alignments
 		if 'XA' in dict(alignment.tags):
 			alignments = parseXA(alignments,dict(alignment.tags)['XA'],error_prob,NMtag+NMdiff,alignment.is_reverse)
-	
+
 	# Make row for last read
 	if not new_read_id:
 		this_G_of_R = make_G_of_R_row(alignments,rnames_index,rlens,nreps,read_length,flanking,wiggle,min_len,min_exon_len)
@@ -250,11 +250,11 @@ def main():
 				G_of_R = sparse.vstack([G_of_R,this_G_of_R])
 			else:
 				G_of_R = this_G_of_R
-	
+
 	# Write matrix to disk.
 	cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
 	G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
-	print G_of_R_row+reads_per_pickle*pickle_num
-	
+	print(G_of_R_row+reads_per_pickle*pickle_num)
+
 if __name__ == '__main__':
 	main()

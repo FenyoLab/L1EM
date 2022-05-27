@@ -27,7 +27,7 @@ print_string = "locus"
 for name in exp_probs:
 	print_string += "\t"+name
 
-print (print_string)
+print(print_string)
 
 completed = set()
 
@@ -56,4 +56,4 @@ for name in seqs:
 			print_string += '\t'+str(FPM)
 		else:
 			print_string += '\t0.0'
-	print (print_string)
+	print(print_string)

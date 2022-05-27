@@ -26,4 +26,4 @@ for line in open('G_of_R_list.txt'):
 	if G_of_R != None:
 		total += G_of_R.shape[0]
 
-print total
+print(total)
