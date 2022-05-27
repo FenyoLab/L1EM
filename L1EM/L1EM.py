@@ -125,7 +125,7 @@ def main():
 	for G_of_R_pkl in open(G_of_R_list):
 		G_of_R_pkl_fulllist.append(G_of_R_pkl.strip())
 	G_of_R_pkl_lists = list()
-	listsize = len(G_of_R_pkl_fulllist)/nThreads
+	listsize = len(G_of_R_pkl_fulllist)//nThreads
 	nlistsp1 = len(G_of_R_pkl_fulllist)%nThreads
 	k = 0
 	for i in range(nlistsp1):
