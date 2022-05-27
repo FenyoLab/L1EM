@@ -29,7 +29,7 @@ print('name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM')
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
 	sample_name = names_file.split('/')[-1][:-16]
-	exp_prob = dict(zip(pickle.load(open(names_file)),pickle.load(open(X_file))))
+	exp_prob = dict(zip(pickle.load(open(names_file,'rb')),pickle.load(open(X_file,'rb'))))
 	orf1 = 0.0
 	orf2 = 0.0
 	both = 0.0

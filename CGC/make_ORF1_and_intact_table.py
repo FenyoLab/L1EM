@@ -23,7 +23,7 @@ seqs = set([])
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
 	name = names_file.split('/')[-1][:-16]
-	exp_probs[name] = dict(zip(pickle.load(open(names_file)),pickle.load(open(X_file))))
+	exp_probs[name] = dict(zip(pickle.load(open(names_file,'rb')),pickle.load(open(X_file,'rb'))))
 	seqs = seqs | set(exp_probs[name].keys())
 
 l1pa_pairs = dict()

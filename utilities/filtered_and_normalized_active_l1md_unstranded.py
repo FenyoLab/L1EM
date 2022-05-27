@@ -22,7 +22,7 @@ Copyright (C) 2021 Wilson McKerrow
 
 """
 
-X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
+X_est = dict(zip(pickle.load(open(sys.argv[1],'rb')),pickle.load(open(sys.argv[2],'rb'))))
 
 proper_pairs_in_original_bam = float(sys.argv[3])
 

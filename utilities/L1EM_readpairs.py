@@ -22,7 +22,7 @@ Copyright (C) 2019 Wilson McKerrow
 
 total = 0
 for line in open('G_of_R_list.txt'):
-	G_of_R = pickle.load(open(line.strip()))
+	G_of_R = pickle.load(open(line.strip(),'rb'))
 	if G_of_R != None:
 		total += G_of_R.shape[0]
 
