@@ -32,7 +32,7 @@ written_seqs = set([])
 
 print("family.category.locus.strand\tonly\t3prunon")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if 'L1HS' in name:

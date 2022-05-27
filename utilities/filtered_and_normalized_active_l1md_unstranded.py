@@ -32,7 +32,7 @@ written_seqs = set([])
 
 print("family.category.locus.strand\tonly\t3prunon")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if if 'L1MdTf_' in name or 'L1MdGf_' in name or 'L1MdA_I' in name or 'L1MdA_II' in name or 'L1MdA_III' in name:
