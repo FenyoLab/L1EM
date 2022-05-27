@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 
 """
 Report the total numbr of read pairs passed to L1EM

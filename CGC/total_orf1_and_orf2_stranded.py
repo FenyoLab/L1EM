@@ -1,5 +1,5 @@
 import sys
-import cPickle as pickle
+import pickle
 
 exp_prob_pkls_list = sys.argv[1]
 bam_info_list = sys.argv[2]

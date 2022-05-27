@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 
 """
 Extract the estimate of proper transcription of L1HS elements.

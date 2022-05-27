@@ -1,7 +1,7 @@
 import pysam
 import sys
 import numpy
-import cPickle as pickle
+import pickle
 from scipy import sparse
 import datetime
 import argparse
