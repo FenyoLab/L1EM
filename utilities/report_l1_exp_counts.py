@@ -1,4 +1,8 @@
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 """
 Extract the estimate of proper transcription of L1HS elements.
@@ -22,17 +26,17 @@ Copyright (C) 2019 Wilson McKerrow
 
 total = 0
 for line in open('G_of_R_list.txt'):
-	G_of_R = pickle.load(open(line.strip()))
+	G_of_R = pickle.load(open(line.strip(),'rb'))
 	if G_of_R != None:
-		total += pickle.load(open(line.strip())).shape[0]
+		total += pickle.load(open(line.strip(),'rb')).shape[0]
 
-X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.pkl'))))
+X_est = dict(zip(pickle.load(open('names_final.pkl','rb')),pickle.load(open('X_final.pkl','rb'))))
 
 written_seqs = set([])
 
 print("family.category.locus.strand\tonly\t3prunon\tpassive_sense\tpassive_antisense\tantisense")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if 'exon' not in name:

@@ -1,7 +1,11 @@
 import pysam
 import sys
 import numpy
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 from scipy import sparse
 import datetime
 import argparse

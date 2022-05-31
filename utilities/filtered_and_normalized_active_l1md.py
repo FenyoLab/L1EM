@@ -1,4 +1,8 @@
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import sys
 
 """
@@ -21,7 +25,7 @@ Copyright (C) 2021 Wilson McKerrow
 
 """
 
-X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
+X_est = dict(zip(pickle.load(open(sys.argv[1],'rb')),pickle.load(open(sys.argv[2],'rb'))))
 
 proper_pairs_in_original_bam = float(sys.argv[3])
 
@@ -31,7 +35,7 @@ written_seqs = set([])
 
 print("family.category.locus.strand\tonly\t3prunon")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if 'L1MdTf_' in name or 'L1MdGf_' in name or 'L1MdA_I' in name or 'L1MdA_II' in name or 'L1MdA_III' in name:
