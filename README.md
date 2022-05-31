@@ -26,7 +26,7 @@ source deactivate L1EM
 
 ### old way
 Alternatively you can install the following dependencies yourself:
-* python version 2.7
+* python version 2.7+ (version 2.7 tested)
 * bwa (version 0.7.17 tested)
 * samtools (version 1.9 tested)
 * numpy (version 1.14.3 tested)
