@@ -1,4 +1,8 @@
-import cPickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import numpy
 import sys
 import datetime
@@ -30,8 +34,8 @@ Copyright (C) 2019 Wilson McKerrow
 
 # Main calculation for the E step
 def calculate_expcounts(G_of_R_pkl,X):
-	G_of_R_file = open(G_of_R_pkl)
-	G_of_R = cPickle.load(G_of_R_file)
+	G_of_R_file = open(G_of_R_pkl,'rb')
+	G_of_R = pickle.load(G_of_R_file)
 	G_of_R_file.close()
 	if G_of_R == None:
 		return 0.0,0.0
@@ -111,21 +115,21 @@ def GetArgs():
 
 def main():
 	G_of_R_list, TE_list, stop_thresh, report_every, max_nEMsteps, nThreads, prefix = GetArgs()
-	
+
 	# All the transcripts names in the same order as the G_of_R matrix columns
 	TE_names = list()
 	for name in open(TE_list):
 		TE_names.append(name.strip().split('\t')[0])
-	
+
 	# Intial guess
 	X = sparse.csr_matrix(numpy.ones((1,len(TE_names)),dtype=numpy.float64)/len(TE_names))
-	
+
 	# Split up the pickle files into a set for each thread.
 	G_of_R_pkl_fulllist = list()
 	for G_of_R_pkl in open(G_of_R_list):
 		G_of_R_pkl_fulllist.append(G_of_R_pkl.strip())
 	G_of_R_pkl_lists = list()
-	listsize = len(G_of_R_pkl_fulllist)/nThreads
+	listsize = len(G_of_R_pkl_fulllist)//nThreads
 	nlistsp1 = len(G_of_R_pkl_fulllist)%nThreads
 	k = 0
 	for i in range(nlistsp1):
@@ -134,35 +138,35 @@ def main():
 	for i in range(nlistsp1,nThreads):
 		G_of_R_pkl_lists.append(G_of_R_pkl_fulllist[k:k+listsize])
 		k+=listsize
-	
+
 	masterPool = Pool(processes = nThreads)
-	
-	# Run the EM steps	
+
+	# Run the EM steps
 	for step in range(max_nEMsteps):
 		starttime = datetime.datetime.now()
 		exp_counts = numpy.zeros((1,len(TE_names)),dtype=numpy.float64)
 		loglik = 0.0
-		
+
 		outputs = masterPool.map(calculate_expcounts_chunk,zip(G_of_R_pkl_lists,[X]*nThreads))
 		for output in outputs:
 			this_exp_counts,this_loglik = output
 			exp_counts += this_exp_counts
 			loglik += this_loglik
-		
+
 		last_X = X.copy()
 		X = sparse.csr_matrix(exp_counts/numpy.sum(exp_counts))
-		print step,numpy.max(numpy.abs(X.toarray()-last_X.toarray())),loglik,datetime.datetime.now()-starttime
-		
+		print(str(step)+" "+str(numpy.max(numpy.abs(X.toarray()-last_X.toarray())))+" "+str(loglik)+" "+str(datetime.datetime.now()-starttime))
+
 		if (step+1) % report_every == 0:
-			cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-			cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-		
+			pickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_step_'+str(step+1)+'.pkl','wb'),protocol=pickle.HIGHEST_PROTOCOL)
+			pickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_step_'+str(step+1)+'.pkl','wb'),protocol=pickle.HIGHEST_PROTOCOL)
+
 		if numpy.max(numpy.abs(X.toarray()-last_X.toarray())) < stop_thresh:
 			break
-	
+
 	# Output the final results
-	cPickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
-	cPickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','w'),protocol=cPickle.HIGHEST_PROTOCOL)
+	pickle.dump(X.toarray()[X.toarray() > 10**-10],open(prefix+'X_final.pkl','wb'),protocol=pickle.HIGHEST_PROTOCOL)
+	pickle.dump(numpy.array(TE_names)[X.toarray()[0,:] > 10**-10],open(prefix+'names_final.pkl','wb'),protocol=pickle.HIGHEST_PROTOCOL)
 
 if __name__ == '__main__':
 	main()

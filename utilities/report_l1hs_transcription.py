@@ -1,4 +1,8 @@
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 """
 Extract the estimate of proper transcription of L1HS elements.
@@ -22,17 +26,17 @@ Copyright (C) 2019 Wilson McKerrow
 
 total = 0
 for line in open('G_of_R_list.txt'):
-	G_of_R = pickle.load(open(line.strip()))
+	G_of_R = pickle.load(open(line.strip(),'rb'))
 	if G_of_R != None:
 		total += G_of_R.shape[0]
 
-X_est = dict(zip(pickle.load(open('names_final.pkl')),pickle.load(open('X_final.pkl'))))
+X_est = dict(zip(pickle.load(open('names_final.pkl','rb')),pickle.load(open('X_final.pkl','rb'))))
 
 written_seqs = set([])
 
-print "family.category.locus.strand\tonly\t3prunon"
+print("family.category.locus.strand\tonly\t3prunon")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if 'L1HS' in name:
@@ -41,16 +45,16 @@ for name in names:
 			continue
 		written_seqs.add(seq_name)
 		print_string = seq_name.split('(')[0]
-		
+
 		total_proper = 0.0
 		total_passive = 0.0
-		
+
 		only_name = seq_name+'_only'
 		if only_name not in X_est:
 			X_est[only_name]=0.0
 		print_string += '\t'+str(total*X_est[only_name])
 		total_proper += total*X_est[only_name]
-		runon_name = seq_name+'_3prunon'		
+		runon_name = seq_name+'_3prunon'
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		print_string += '\t'+str(total*X_est[runon_name])
@@ -64,4 +68,4 @@ for name in names:
 			X_est[antisenserunthrough_name]=0.0
 		total_passive += total*X_est[senserunthrough_name]
 		if total_proper > 3*total_passive:
-			print print_string
+			print(print_string)

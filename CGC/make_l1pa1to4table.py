@@ -1,5 +1,9 @@
 import sys
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 exp_prob_pkls_list = sys.argv[1]
 bam_info_list = sys.argv[2]
@@ -10,7 +14,7 @@ seqs = set([])
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
 	name = names_file.split('/')[-1][:-16]
-	exp_probs[name] = dict(zip(pickle.load(open(names_file)),pickle.load(open(X_file))))
+	exp_probs[name] = dict(zip(pickle.load(open(names_file,'rb')),pickle.load(open(X_file,'rb'))))
 	seqs = seqs | set(exp_probs[name].keys())
 
 l1pa_pairs = dict()
@@ -26,7 +30,7 @@ print_string = "locus"
 for name in exp_probs:
 	print_string += "\t"+name+'-active'+"\t"+name+'-passive'
 
-print (print_string)
+print(print_string)
 
 completed = set()
 
@@ -52,4 +56,4 @@ for name in seqs:
 		if runthrough_name in exp_probs[name]:
 			runthrough_FPM += exp_probs[name][runthrough_name]*l1pa_pairs[name]/mapped_pairs[name]*10**6
 		print_string += '\t'+str(FPM)+'\t'+str(runthrough_FPM)
-	print (print_string)
+	print(print_string)

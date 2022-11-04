@@ -1,7 +1,11 @@
 import pysam
 import sys
 import numpy
-import cPickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 from scipy import sparse
 import datetime
 import argparse
@@ -182,9 +186,9 @@ def parseXA(alignments,XAtagdict,error_prob,maxNM,reversed):
 
 def main():
 	bamfile, error_prob, max_start2start_len, reads_per_pickle, prefix, NMdiff, insert_mean, flanking, as_start, wiggle, min_len, min_exon_len = GetArgs()
-	
+
 	pickle_num = 0
-	
+
 	bam = pysam.Samfile(bamfile, "rb")
 	rnames = bam.references
 	rlens = bam.lengths
@@ -192,7 +196,7 @@ def main():
 	rnames_index = dict()
 	for i in range(nreps):
 		rnames_index[rnames[i]] = i
-	
+
 	# Write transcript (column) names
 	TEnamefile = open(prefix+'_TE_list.txt','w')
 	for i in range(nreps):
@@ -202,15 +206,15 @@ def main():
 	for i in range(nreps):
 		TEnamefile.write(rnames[i]+'_3prunon'+'\t'+str(rlens[i]+flanking)+'\n')
 	TEnamefile.close()
-	
+
 	read_id = None
-	
+
 	G_of_R = None
 	G_of_R_list_file = open(prefix+'_list.txt','w')
 	G_of_R_row = 0
-	
+
 	starttime = datetime.datetime.now()
-	
+
 	# Read through the name sorted bam file
 	for alignment in bam:
 		read_length = alignment.query_length
@@ -221,12 +225,12 @@ def main():
 			continue
 		if numpy.mean(alignment.query_qualities) < 30:
 			continue
-			
+
 		if not read_id:
 			read_id = alignment.qname
 			new_read_id1 = True
 			new_read_id2 = True
-		
+
 		# Once we have read all entries for a given query name, create a row for that fragment
 		if read_id != alignment.qname:
 			if not (new_read_id1 or new_read_id2):
@@ -239,25 +243,25 @@ def main():
 					G_of_R_row += 1
 				# If necessary, break up matrix into multiple pickle files.
 				if G_of_R_row >= reads_per_pickle:
-					cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
+					pickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=pickle.HIGHEST_PROTOCOL)
 					G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
 					pickle_num += 1
 					G_of_R_row = 0
 					G_of_R = None
-					print 'wrote',reads_per_pickle,'reads in',datetime.datetime.now()-starttime
+					print('wrote '+str(reads_per_pickle)+' reads in '+str(datetime.datetime.now()-starttime))
 					starttime = datetime.datetime.now()
-			
+
 			read_id = alignment.qname
 			new_read_id1 = True
 			new_read_id2 = True
-		
+
 		# Parse primary alignment
 		# There's a bug in bwa samse (0.7.17) when writing NM tag for overlapping read pairs
 		NMtag = dict(alignment.tags)['XM']
 		for pair in alignment.cigartuples:
 			NMtag += (pair[0]>0)*pair[1]
 		P = error_prob**NMtag
-		
+
 		if alignment.is_read1:
 			if new_read_id1:
 				alignments1 = read_alignments(alignment,rnames,P)
@@ -270,14 +274,14 @@ def main():
 				new_read_id2 = False
 			else:
 				alignments2.add(alignment,rnames,P)
-		
+
 		# Parse secondary alignments
 		if 'XA' in dict(alignment.tags):
 			if alignment.is_read1:
 				alignments1 = parseXA(alignments1,dict(alignment.tags)['XA'],error_prob,NMtag+NMdiff,alignment.is_reverse)
 			else:
 				alignments2 = parseXA(alignments2,dict(alignment.tags)['XA'],error_prob,NMtag+NMdiff,alignment.is_reverse)
-	
+
 	# Make row for last read
 	if read_id!=None and not (new_read_id1 or new_read_id2):
 		this_G_of_R = get_concardant_alignments(alignments1,alignments2,max_start2start_len,rnames_index,rlens,insert_mean,nreps,read_length,flanking,as_start,wiggle,min_len,min_exon_len)
@@ -286,12 +290,12 @@ def main():
 				G_of_R = sparse.vstack([G_of_R,this_G_of_R])
 			else:
 				G_of_R = this_G_of_R
-	
+
 	# Write matrix to disk.
 	if G_of_R_row+reads_per_pickle*pickle_num >0:
-		cPickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=cPickle.HIGHEST_PROTOCOL)
+		pickle.dump(G_of_R,open(prefix+'.'+str(pickle_num)+'.pk2','wb'),protocol=pickle.HIGHEST_PROTOCOL)
 		G_of_R_list_file.write(prefix+'.'+str(pickle_num)+'.pk2\n')
-		print G_of_R_row+reads_per_pickle*pickle_num
-	
+		print(G_of_R_row+reads_per_pickle*pickle_num)
+
 if __name__ == '__main__':
 	main()

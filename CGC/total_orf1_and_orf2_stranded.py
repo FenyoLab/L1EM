@@ -1,5 +1,9 @@
 import sys
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 exp_prob_pkls_list = sys.argv[1]
 bam_info_list = sys.argv[2]
@@ -24,12 +28,12 @@ for line in open(bam_info_list):
 	mapped_pairs[name] = int(baminfo[1])
 	l1pa_pairs[name] = int(baminfo[2])
 
-print 'name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM'
+print('name\torf1_FPM\tORF2_FPM\tboth_FPM\tL1HS_expression_FPM\tL1HS_all_FPM')
 
 for line in open(exp_prob_pkls_list):
 	names_file, X_file = line.strip().split('\t')
 	sample_name = names_file.split('/')[-1][:-16]
-	exp_prob = dict(zip(pickle.load(open(names_file)),pickle.load(open(X_file))))
+	exp_prob = dict(zip(pickle.load(open(names_file,'rb')),pickle.load(open(X_file,'rb'))))
 	orf1 = 0.0
 	orf2 = 0.0
 	both = 0.0
@@ -61,4 +65,4 @@ for line in open(exp_prob_pkls_list):
 			both += FPM
 		if 'L1HS' in seq_name:
 			L1HS_exp += FPM
-	print ( sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all) )
+	print(sample_name +'\t'+ str(orf1) +'\t'+ str(orf2) +'\t'+ str(both) +'\t'+ str(L1HS_exp) +'\t'+ str(L1HS_all))

@@ -1,4 +1,8 @@
-import cPickle as pickle
+# On Python2 import cPickle for performance improvement, else import pickle (available to both Py2 and Py3).
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 import sys
 
 """
@@ -21,7 +25,7 @@ Copyright (C) 2021 Wilson McKerrow
 
 """
 
-X_est = dict(zip(pickle.load(open(sys.argv[1])),pickle.load(open(sys.argv[2]))))
+X_est = dict(zip(pickle.load(open(sys.argv[1],'rb')),pickle.load(open(sys.argv[2],'rb'))))
 
 proper_pairs_in_original_bam = float(sys.argv[3])
 
@@ -29,9 +33,9 @@ total = float(sys.argv[4])
 
 written_seqs = set([])
 
-print "family.category.locus.strand\tonly\t3prunon"
+print("family.category.locus.strand\tonly\t3prunon")
 
-names = X_est.keys()
+names = list(X_est.keys())
 
 for name in names:
 	if 'L1MdTf_' in name or 'L1MdGf_' in name or 'L1MdA_I' in name or 'L1MdA_II' in name or 'L1MdA_III' in name:
@@ -44,7 +48,7 @@ for name in names:
 		if only_name not in X_est:
 			X_est[only_name]=0.0
 		only_pairs = total*X_est[only_name]
-		runon_name = seq_name+'_3prunon'		
+		runon_name = seq_name+'_3prunon'
 		if runon_name not in X_est:
 			X_est[runon_name]=0.0
 		runon_pairs = total*X_est[runon_name]
@@ -57,4 +61,4 @@ for name in names:
 			X_est[runthroughA_name]=0.0
 		runthrough_pairs += total*X_est[runthroughA_name]
 		if (only_pairs+runon_pairs > 10*runthrough_pairs) & (only_pairs+runon_pairs>100):
-			print seq_name.split('(')[0]+'\t'+str(only_pairs/proper_pairs_in_original_bam*10**6)+'\t'+str(runon_pairs/proper_pairs_in_original_bam*10**6)
+			print(seq_name.split('(')[0]+'\t'+str(only_pairs/proper_pairs_in_original_bam*10**6)+'\t'+str(runon_pairs/proper_pairs_in_original_bam*10**6))
