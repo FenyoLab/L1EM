@@ -66,6 +66,6 @@ for name in names:
 		antisenserunthrough_name = seq_name+'_antisenserunthrough'
 		if antisenserunthrough_name not in X_est:
 			X_est[antisenserunthrough_name]=0.0
-		total_passive += total*X_est[senserunthrough_name]
+		total_passive += total*X_est[antisenserunthrough_name]
 		if total_proper > 3*total_passive:
 			print(print_string)
