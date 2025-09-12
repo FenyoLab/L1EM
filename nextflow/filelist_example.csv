@@ -1,0 +1,2 @@
+sample_id,strandedness,input_bam,hg38_fa_dir,ref,l1em_scripts,results_dir,nr_threads,realignNM,L1EM_NM,NMdiff,bwa_i,error_prob,max_start2start_len,reads_per_pickle,EM_threshold,template_fraction
+filename,stranded,/dir/example.bam,dir/L1EM,/dir/L1EM/annotation/L1EM.400.fa,dir/L1EM,/dir/results_dir,16,3,3,2,20,0.01,500,5000,1.00E-06,0.001
